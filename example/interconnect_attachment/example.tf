@@ -15,38 +15,19 @@ module "vpc" {
 }
 
 ####==============================================================================
-#### cloud_router module call.
+#### interconnect_attachment module call.
 ####==============================================================================
 module "cloud_router" {
-  source      = "../../"
-  name        = "app"
-  environment = "test"
-  network     = module.vpc.vpc_id
-  region      = "asia-northeast1"
+  source                          = "../../"
+  name                            = "app"
+  environment                     = "test"
+  region                          = "asia-northeast1"
+  network                         = module.vpc.vpc_id
+  enabled_interconnect_attachment = true
+  #  interconnect = "https://googleapis.com/interconnects/example-interconnect"
+
   bgp = {
     asn               = "16550"
     advertised_groups = ["ALL_SUBNETS"]
-  }
-}
-
-####==============================================================================
-#### interconnect_attachment module call.
-####==============================================================================
-module "interconnect_attachment" {
-  source       = "../../modules/interconnect_attachment"
-  name         = "app"
-  environment  = "test"
-  region       = "asia-northeast1"
-  router       = module.cloud_router.router.name
-  interconnect = "https://googleapis.com/interconnects/example-interconnect"
-
-  interface = {
-    name = "interface"
-  }
-
-  peer = {
-    name            = "peer"
-    peer_ip_address = "192.0.2.1"
-    peer_asn        = "16550"
   }
 }

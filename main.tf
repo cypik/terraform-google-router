@@ -50,7 +50,7 @@ resource "google_compute_router_nat" "nats" {
     n.name => n
   }
 
-  name                                = format("%s-nat", module.labels.id)
+  name                                = each.value.name
   project                             = google_compute_router.router.project
   router                              = google_compute_router.router.name
   region                              = google_compute_router.router.region
@@ -78,6 +78,58 @@ resource "google_compute_router_nat" "nats" {
       name                     = subnetwork.value.name
       source_ip_ranges_to_nat  = subnetwork.value.source_ip_ranges_to_nat
       secondary_ip_range_names = subnetwork.value.secondary_ip_range_names
+    }
+  }
+}
+resource "google_compute_interconnect_attachment" "attachment" {
+  count                    = var.enabled_interconnect_attachment ? 1 : 0
+  name                     = format("%s-attachment", module.labels.id)
+  edge_availability_domain = var.edge_availability_domain
+  type                     = var.type
+  router                   = join("", google_compute_router.router[*].id)
+  mtu                      = var.mtu
+  project                  = data.google_client_config.current.project
+  region                   = var.region
+  admin_enabled            = var.admin_enabled
+  description              = var.description
+  bandwidth                = var.bandwidth
+  candidate_subnets        = var.candidate_subnets
+  vlan_tag8021q            = var.vlan_tag8021q
+
+}
+
+resource "google_compute_router_interface" "foobar" {
+  count = var.enabled_interconnect_attachment ? 1 : 0
+
+  name       = format("%s-foobar-interface", module.labels.id)
+  router     = join("", google_compute_router.router[*].name)
+  region     = var.region
+  ip_range   = join("", google_compute_interconnect_attachment.attachment[*].cloud_router_ip_address)
+  vpn_tunnel = var.vpn_tunnel
+  project    = data.google_client_config.current.project
+
+}
+resource "google_compute_router_peer" "peer" {
+  for_each = {
+    for p in var.peers :
+    p.name => p
+  }
+
+  name                      = each.value.name
+  project                   = google_compute_router_interface.foobar[*].project
+  router                    = google_compute_router_interface.foobar[*].router
+  region                    = google_compute_router_interface.foobar[*].region
+  peer_ip_address           = element(split("/", google_compute_interconnect_attachment.attachment[*].customer_router_ip_address), 1)
+  peer_asn                  = var.peer_asn
+  advertised_route_priority = lookup(each.value, "advertised_route_priority", null)
+  interface                 = google_compute_router_interface.foobar[*].name
+  dynamic "bfd" {
+    for_each = lookup(each.value, "bfd", null) == null ? [] : [""]
+    content {
+      session_initialization_mode = try(each.value.bfd.session_initialization_mode, null)
+      min_receive_interval        = try(each.value.bfd.min_receive_interval, null)
+      min_transmit_interval       = try(each.value.bfd.min_transmit_interval, null)
+      multiplier                  = try(each.value.bfd.multiplier, null)
     }
   }
 }

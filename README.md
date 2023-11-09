@@ -22,28 +22,32 @@ module "cloud_router" {
   environment = "test"
   network     = module.vpc.vpc_id
   region      = "asia-northeast1"
-  nats = [{
-    name                               = "my-nat-gateway"
-    source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
-  }]
+  nats = [
+    {
+      name                               = "my-nat-gateway"
+      source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+    }
+  ]
 }
 ```
 # Example: interconnect_attachment
 
 ```hcl
 module "cloud_router" {
-  source      = "git::https://github.com/opz0/terraform-gcp-router.git?ref=v1.0.0"
-  name        = "app"
-  environment = "test"
-  network     = module.vpc.vpc_id
-  region      = "asia-northeast1"
+  source                          = "git::https://github.com/opz0/terraform-gcp-router.git?ref=v1.0.0"
+  name                            = "app"
+  environment                     = "test"
+  region                          = "asia-northeast1"
+  network                         = module.vpc.vpc_id
+  enabled_interconnect_attachment = true
+
   bgp = {
     asn               = "16550"
     advertised_groups = ["ALL_SUBNETS"]
   }
 }
 ```
-# Example: simple_example
+# Example: default
 
 ```hcl
 module "cloud_router" {
