@@ -8,11 +8,9 @@ provider "google" {
 #### vpc module call.
 ####==============================================================================
 module "vpc" {
-  source                                    = "git::git@github.com:opz0/terraform-gcp-vpc.git?ref=master"
+  source                                    = "git::https://github.com/opz0/terraform-gcp-vpc.git?ref=v1.0.0"
   name                                      = "app"
   environment                               = "test"
-  label_order                               = ["name", "environment"]
-  project_id                                = "opz0-397319"
   network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
 }
 
@@ -20,12 +18,11 @@ module "vpc" {
 #### cloud_router module call.
 ####==============================================================================
 module "cloud_router" {
-  source     = "../../"
-  name       = "example-router"
-  project_id = "opz0-397319"
-  network    = module.vpc.vpc_id
-  region     = "asia-northeast1"
-
+  source      = "../../"
+  name        = "app"
+  environment = "test"
+  network     = module.vpc.vpc_id
+  region      = "asia-northeast1"
   bgp = {
     asn               = "16550"
     advertised_groups = ["ALL_SUBNETS"]
@@ -37,8 +34,8 @@ module "cloud_router" {
 ####==============================================================================
 module "interconnect_attachment" {
   source       = "../../modules/interconnect_attachment"
-  name         = "test-suresh"
-  project      = "opz0-397319"
+  name         = "app"
+  environment  = "test"
   region       = "asia-northeast1"
   router       = module.cloud_router.router.name
   interconnect = "https://googleapis.com/interconnects/example-interconnect"

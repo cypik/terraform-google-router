@@ -1,13 +1,31 @@
 variable "name" {
   type        = string
   default     = ""
-  description = "The name of the interconnect attachment"
+  description = "Name of the resource. Provided by the client when the resource is created. "
 }
 
-variable "project" {
+variable "environment" {
   type        = string
   default     = ""
-  description = "The project ID to deploy to"
+  description = "Environment (e.g. `prod`, `dev`, `staging`)."
+}
+
+variable "label_order" {
+  type        = list(any)
+  default     = ["name", "environment"]
+  description = "Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] ."
+}
+
+variable "managedby" {
+  type        = string
+  default     = ""
+  description = "ManagedBy, eg 'Opz0'."
+}
+
+variable "repository" {
+  type        = string
+  default     = ""
+  description = "Terraform current module repo"
 }
 
 variable "router" {
@@ -20,12 +38,6 @@ variable "region" {
   type        = string
   default     = ""
   description = "Region where the attachment resides"
-}
-
-variable "interconnect" {
-  type        = string
-  default     = ""
-  description = "URL of the underlying Interconnect object that this attachment's traffic will traverse through."
 }
 
 variable "admin_enabled" {

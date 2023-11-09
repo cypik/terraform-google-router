@@ -8,11 +8,9 @@ provider "google" {
 #### vpc module call.
 ####==============================================================================
 module "vpc" {
-  source                                    = "git::git@github.com:opz0/terraform-gcp-vpc.git?ref=master"
+  source                                    = "git::https://github.com/opz0/terraform-gcp-vpc.git?ref=v1.0.0"
   name                                      = "app"
   environment                               = "test"
-  label_order                               = ["name", "environment"]
-  project_id                                = "opz0-397319"
   network_firewall_policy_enforcement_order = "AFTER_CLASSIC_FIREWALL"
 }
 
@@ -20,14 +18,13 @@ module "vpc" {
 ##### cloud_router module call.
 #####==============================================================================
 module "cloud_router" {
-  source     = "../../"
-  name       = "my-router"
-  network    = module.vpc.vpc_id
-  project_id = "opz0-397319"
-  region     = "asia-northeast1"
+  source      = "../../"
+  name        = "app"
+  environment = "test"
+  network     = module.vpc.vpc_id
+  region      = "asia-northeast1"
   nats = [{
     name                               = "my-nat-gateway"
     source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
-
   }]
 }

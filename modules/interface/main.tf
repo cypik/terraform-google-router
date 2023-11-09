@@ -1,11 +1,22 @@
+module "labels" {
+  source      = "git::https://github.com/opz0/terraform-gcp-labels.git?ref=v1.0.0"
+  name        = var.name
+  environment = var.environment
+  label_order = var.label_order
+  managedby   = var.managedby
+  repository  = var.repository
+}
+
+data "google_client_config" "current" {
+}
+
 resource "google_compute_router_interface" "foobar" {
-  name       = var.name
+  name       = format("%s-foobar", module.labels.id)
   router     = var.router
   region     = var.region
   ip_range   = var.ip_range
   vpn_tunnel = var.vpn_tunnel
-  project    = var.project
-  #  interconnect_attachment = var.vpn_tunnel
+  project    = data.google_client_config.current.project
 
 }
 resource "google_compute_router_peer" "peer" {

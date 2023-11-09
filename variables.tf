@@ -33,22 +33,10 @@ variable "network" {
   description = "A reference to the network to which this router belongs"
 }
 
-variable "project_id" {
-  type        = string
-  description = "The project ID to deploy to"
-}
-
 variable "region" {
   type        = string
   description = "Region where the router resides"
 }
-
-variable "description" {
-  type        = string
-  description = "An optional description of this resource"
-  default     = null
-}
-
 
 variable "bgp" {
   description = "BGP information specific to this router."
@@ -64,8 +52,8 @@ variable "bgp" {
 
   })
   default = null
-
 }
+
 variable "nats" {
   description = "NATs to deploy on this router."
   type = list(object({
@@ -97,4 +85,3 @@ variable "nats" {
   }))
   default = []
 }
-

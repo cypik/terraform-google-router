@@ -1,13 +1,31 @@
 variable "name" {
   type        = string
   default     = ""
-  description = "The name of the interface"
+  description = "Name of the resource. Provided by the client when the resource is created. "
 }
 
-variable "project" {
+variable "environment" {
   type        = string
   default     = ""
-  description = "The project ID to deploy to"
+  description = "Environment (e.g. `prod`, `dev`, `staging`)."
+}
+
+variable "label_order" {
+  type        = list(any)
+  default     = ["name", "environment"]
+  description = "Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] ."
+}
+
+variable "managedby" {
+  type        = string
+  default     = ""
+  description = "ManagedBy, eg 'Opz0'."
+}
+
+variable "repository" {
+  type        = string
+  default     = ""
+  description = "Terraform current module repo"
 }
 
 variable "router" {
@@ -50,6 +68,7 @@ variable "peers" {
   description = "BGP peers for this interface."
   default     = []
 }
+
 variable "peer_asn" {
   type    = number
   default = 65513

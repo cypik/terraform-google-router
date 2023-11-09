@@ -1,5 +1,5 @@
 module "labels" {
-  source      = "git::git@github.com:opz0/terraform-gcp-labels.git?ref=master"
+  source      = "git::https://github.com/opz0/terraform-gcp-labels.git?ref=v1.0.0"
   name        = var.name
   environment = var.environment
   label_order = var.label_order
@@ -7,13 +7,16 @@ module "labels" {
   repository  = var.repository
 }
 
+data "google_client_config" "current" {
+}
+
 #####==============================================================================
 ##### Represents a Router resource.
 #####==============================================================================
 resource "google_compute_router" "router" {
-  name    = var.name
+  name    = format("%s-router", module.labels.id)
   region  = var.region
-  project = var.project_id
+  project = data.google_client_config.current.project
   network = var.network
   dynamic "bgp" {
     for_each = var.bgp != null ? [var.bgp] : []
@@ -47,7 +50,7 @@ resource "google_compute_router_nat" "nats" {
     n.name => n
   }
 
-  name                                = each.value.name
+  name                                = format("%s-nat", module.labels.id)
   project                             = google_compute_router.router.project
   router                              = google_compute_router.router.name
   region                              = google_compute_router.router.region
