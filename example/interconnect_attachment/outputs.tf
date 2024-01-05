@@ -22,3 +22,8 @@ output "nat" {
   value       = module.cloud_router.nat
   description = "Created NATs"
 }
+
+output "customer_router_ip_address" {
+  value       = module.cloud_router.customer_router_ip_address
+  description = "IPv4 address + prefix length to be configured on the customer router subinterface for this interconnect attachment."
+}

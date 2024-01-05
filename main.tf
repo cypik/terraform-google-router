@@ -107,8 +107,8 @@ resource "google_compute_router_interface" "foobar" {
   ip_range   = join("", google_compute_interconnect_attachment.attachment[*].cloud_router_ip_address)
   vpn_tunnel = var.vpn_tunnel
   project    = data.google_client_config.current.project
-
 }
+
 resource "google_compute_router_peer" "peer" {
   for_each = {
     for p in var.peers :

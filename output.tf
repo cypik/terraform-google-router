@@ -22,15 +22,16 @@ output "nat" {
   value       = google_compute_router_nat.nats
   description = "Created NATs"
 }
+
 output "attachment" {
   value       = google_compute_interconnect_attachment.attachment
   description = "The created attachment"
 }
 
-#output "customer_router_ip_address" {
-#  value       = google_compute_interconnect_attachment.attachment.customer_router_ip_address
-#  description = "IPv4 address + prefix length to be configured on the customer router subinterface for this interconnect attachment."
-#}
+output "customer_router_ip_address" {
+  value       = [for attachment in google_compute_interconnect_attachment.attachment : attachment.customer_router_ip_address]
+  description = "IPv4 address + prefix length to be configured on the customer router subinterface for this interconnect attachment."
+}
 
 output "cloud_router_ip_address" {
   value       = join("", google_compute_interconnect_attachment.attachment[*].cloud_router_ip_address)

@@ -1,4 +1,4 @@
-# terraform-gcp-router
+# Terraform-gcp-router
 # Google Cloud Infrastructure Provisioning with Terraform
 ## Table of Contents
 
@@ -9,12 +9,12 @@
 - [License](#license)
 
 ## Introduction
-This project deploys a Google Cloud infrastructure using Terraform to create router .
+This project deploys a Google Cloud infrastructure using Terraform to create Router .
 ## Usage
 To use this module, you should have Terraform installed and configured for GCP. This module provides the necessary Terraform configuration for creating GCP resources, and you can customize the inputs as needed. Below is an example of how to use this module:
 ## Examples
 
-# Example: nat
+# Example: _Nat_
 ```hcl
 module "cloud_router" {
   source      = "git::https://github.com/cypik/terraform-gcp-router.git?ref=v1.0.0"
@@ -30,7 +30,7 @@ module "cloud_router" {
   ]
 }
 ```
-# Example: interconnect_attachment
+# Example: _Interconnect_Attachment_
 
 ```hcl
 module "cloud_router" {
@@ -47,7 +47,7 @@ module "cloud_router" {
   }
 }
 ```
-# Example: default
+# Example: _Default_
 
 ```hcl
 module "cloud_router" {
@@ -65,29 +65,29 @@ This example demonstrates how to create various GCP resources using the provided
 
 ## Module Inputs
 
-- 'name'  :  Name of the NAT service.
-- 'environment': The environment type.
-- 'project_id' : The GCP project ID.
-- 'region':  Region where the router and NAT reside.
-- 'network': A reference to the network to which this router belongs.
-- 'bgp' : BGP information specific to this router.
-- 'nats' : RouterNat section in any Router for this network
+- `name`  :  Name of the NAT service.
+- `environment` : The environment type.
+- `project_id` : The GCP project ID.
+- `region` :  Region where the router and NAT reside.
+- `network` : A reference to the network to which this router belongs.
+- `bgp` : BGP information specific to this router.
+- `nats` : RouterNat section in any Router for this network
 
 
 ## Module Outputs
 Each module may have specific outputs. You can retrieve these outputs by referencing the module in your Terraform configuration.
 
-- 'router_id' : An identifier for the resource with format.
-- 'creation_timestamp' : Creation timestamp in RFC3339 text format.
-- 'self_link':   The URI of the created resource.
-- 'router' : Created Router.
-- 'nat': Created NATs.
+- `router_id` : An identifier for the resource with format.
+- `creation_timestamp` : Creation timestamp in RFC3339 text format.
+- `self_link` :   The URI of the created resource.
+- `router` : Created Router.
+- `nat` : Created NATs.
 
 ## Examples
-For detailed examples on how to use this module, please refer to the '[examples](https://github.com/cypik/terraform-gcp-router/blob/master/example)' directory within this repository.
+For detailed examples on how to use this module, please refer to the [Examples](https://github.com/cypik/terraform-gcp-router/tree/master/example) directory within this repository.
 
 ## Author
-Your Name Replace '[License Name]' and '[Your Name]' with the appropriate license and your information. Feel free to expand this README with additional details or usage instructions as needed for your specific use case.
+Your Name Replace **'[License Name]'** and **'[Your Name]'** with the appropriate license and your information. Feel free to expand this README with additional details or usage instructions as needed for your specific use case.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/cypik/terraform-gcp-router/blob/master/LICENSE) file for details.
