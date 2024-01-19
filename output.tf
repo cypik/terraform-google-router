@@ -74,5 +74,6 @@ output "self_link" {
 }
 
 output "id" {
-  value = join("", google_compute_router_interface.foobar[*].id)
+  value       = join("", google_compute_router_interface.foobar[*].id)
+  description = "Joining the  attribute of all instances of google_compute_router_interface resource named ."
 }
