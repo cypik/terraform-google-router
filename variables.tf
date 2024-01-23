@@ -18,13 +18,13 @@ variable "label_order" {
 
 variable "managedby" {
   type        = string
-  default     = ""
+  default     = "cypik"
   description = "ManagedBy, eg 'cypik'."
 }
 
 variable "repository" {
   type        = string
-  default     = "https://github.com/cypik/terraform-gcp-router"
+  default     = "https://github.com/cypik/terraform-google-router"
   description = "Terraform current module repo"
 }
 
@@ -157,10 +157,13 @@ variable "peers" {
 }
 
 variable "peer_asn" {
-  type    = number
-  default = 65513
+  type        = number
+  default     = 65513
+  description = "The ASN (Autonomous System Number) of the peer for the interconnect."
 }
+
 variable "enabled_interconnect_attachment" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Set to true to enable interconnect attachment, false otherwise."
 }
